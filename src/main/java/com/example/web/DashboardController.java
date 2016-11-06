@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,16 @@ public class DashboardController {
 	@ExceptionHandler
 	public ResponseEntity handleNotFoundException(ReactorPersonNotFoundException exc) {
 		return ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/issues")
+	public Mono<String> issues(Model model) {
+
+		return this.dashboardService.findReactorIssues()
+				.collectList().then(list -> {
+					model.addAttribute("issues", list);
+					return Mono.just("issues");
+				});
 	}
 
 }
