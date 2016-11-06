@@ -45,7 +45,17 @@
             chatZone.append("<dt>" + message.fromUser.displayName + "</dt>");
             chatZone.append("<dd>" + message.text + "</dd>");
         }
+		$.ajax("/chatMessages")
+				.done(function (messages) {
+					messages.forEach(function (msg) {
+						appendChatMessage(msg);
+		            });
+		        });
 
+		var chatEventSource = new EventSource("/chatStream");
+		chatEventSource.onmessage = function (e) {
+			appendChatMessage(JSON.parse(e.data));
+		}
     });
 </script>
 </body>
