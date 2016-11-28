@@ -42,8 +42,8 @@
     $(function () {
         var appendChatMessage = function (message) {
             var chatZone = $("#chat-messages");
-            chatZone.append("<dt>" + message.fromUser.displayName + "</dt>");
-            chatZone.append("<dd>" + message.text + "</dd>");
+            chatZone.append($("<dt/>").text(message.fromUser.displayName))
+                    .append($("<dd/>").text(message.text));
         }
 		$.ajax("/chatMessages")
 				.done(function (messages) {
